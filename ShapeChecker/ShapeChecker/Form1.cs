@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -58,15 +59,14 @@ namespace ShapeChecker
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            LoadDemo(string.Format("{0}\\{1}",  System.Environment.CurrentDirectory,"Images\\1.png"));
+            LoadDemo(string.Format("{0}\\{1}",  System.Environment.CurrentDirectory, "Images\\2018_07_19_09_59_54_901_290_650.png"));
         }
 
         // Load one of the embedded demo image
         private void LoadDemo(string embeddedFileName)
         {
             // load arrow bitmap
-            Bitmap image = new Bitmap(embeddedFileName);
-            ProcessImage(image);
+            ProcessImage(embeddedFileName);
         }
 
         private void tslblOpen_Click(object sender, EventArgs e)
@@ -76,7 +76,7 @@ namespace ShapeChecker
             {
                 try
                 {
-                    ProcessImage((Bitmap)Bitmap.FromFile(openFileDialog.FileName));
+                    ProcessImage(openFileDialog.FileName);
                 }
                 catch
                 {
@@ -86,8 +86,9 @@ namespace ShapeChecker
         }
 
         // Process image
-        private void ProcessImage(Bitmap bitmap)
+        private void ProcessImage(string fileName)
         {
+            Bitmap bitmap = new Bitmap(fileName);
             // lock image
             BitmapData bitmapData = bitmap.LockBits(
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
@@ -124,6 +125,7 @@ namespace ShapeChecker
             Pen greenPen = new Pen(Color.Green, 2);   // known triangle
             Pen bluePen = new Pen(Color.Blue, 2);     // triangle
 
+            int count = 0;
             for (int i = 0, n = blobs.Length; i < n; i++)
             {
                 List<IntPoint> edgePoints = blobCounter.GetBlobsEdgePoints(blobs[i]);
@@ -139,6 +141,7 @@ namespace ShapeChecker
                         (float)(radius * 2), (float)(radius * 2));
                     redPointF = new PointF((float)center.X, (float)center.Y);
                     lblPoint.Text = string.Format("[{0}, {1}]", center.X, center.Y);
+                    count++;
                 }
                 else
                 {
@@ -174,9 +177,39 @@ namespace ShapeChecker
             g.Dispose();
 
             // put new image to clipboard
-            Clipboard.SetDataObject(bitmap);
+            //Clipboard.SetDataObject(bitmap);
             // and to picture box
             pictureBox.Image = bitmap;
+            if (count == 1)
+            {
+                string name = Path.GetFileNameWithoutExtension(fileName);
+                var names = name.Split('_');
+                if (names.Length == 9)
+                {
+                    var x = names[7];
+                    var y = names[8];
+                    txtXPoint.Text = x;
+                    txtYPoint.Text = y;
+                    btnCalculate_Click(null, null);
+                }
+                else
+                {
+                    txtXPoint.Text = "";
+                    txtYPoint.Text = "";
+                    this.lblDistance.Text = "";
+                }
+            }
+            else
+            {
+                if(MessageBox.Show("光斑识别失败，请打开包含正常光斑的图片。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    this.lblPoint.Text = "[0, 0]";
+                    txtXPoint.Text = "";
+                    txtYPoint.Text = "";
+                    this.lblDistance.Text = "";
+                    this.pictureBox.Image = null;
+                }
+            }
         }
 
         // Conver list of AForge.NET's points to array of .NET points

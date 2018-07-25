@@ -35,7 +35,7 @@ namespace ShapeChecker
         public double DigitalMagnification
         {
             //1600 -> image size is 1280*960
-            get { return PixelToMillimeter(1600) / 4; }
+            get { return 40 * PixelToMillimeter(1600) / 8; }
         }
 
         public MainForm()
@@ -59,7 +59,7 @@ namespace ShapeChecker
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            LoadDemo(string.Format("{0}\\{1}",  System.Environment.CurrentDirectory, "Images\\2018_07_19_09_59_54_901_290_650.png"));
+            LoadDemo(string.Format("{0}\\{1}",  System.Environment.CurrentDirectory, "Images\\2018_07_24_18_56_51_980_875_558.png"));
         }
 
         // Load one of the embedded demo image
@@ -139,8 +139,8 @@ namespace ShapeChecker
                     g.DrawEllipse(yellowPen,
                         (float)(center.X - radius), (float)(center.Y - radius),
                         (float)(radius * 2), (float)(radius * 2));
-                    redPointF = new PointF((float)center.X, (float)center.Y);
-                    lblPoint.Text = string.Format("[{0}, {1}]", center.X, center.Y);
+                    redPointF = new PointF((float)(center.X + 320), (float)(center.Y + 60));
+                    lblPoint.Text = string.Format("[{0}, {1}]", redPointF.X, redPointF.Y);
                     count++;
                 }
                 else

@@ -91,15 +91,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Images\2018_07_19_09_59_56_701_640_400.png">
+    <Content Include="Images\2018_07_24_18_56_51_980_875_558.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\2018_07_19_09_59_54_901_290_650.png">
+    <Content Include="Images\2018_07_24_18_57_08_992_807_390.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\2018_07_19_09_59_55_901_960_170.png">
+    <Content Include="Images\2018_07_24_18_57_13_986_1178_494.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\2018_07_24_18_57_18_341_1123_237.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
